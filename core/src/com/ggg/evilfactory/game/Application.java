@@ -3,27 +3,30 @@ package com.ggg.evilfactory.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.ggg.evilfactory.screens.GameScreen;
-import com.ggg.evilfactory.screens.HelpScreen;
-import com.ggg.evilfactory.screens.SettingsScreen;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.ggg.evilfactory.screens.*;
 import com.ggg.evilfactory.utils.Constants;
-import com.ggg.evilfactory.screens.TitleScreen;
+import com.ggg.evilfactory.utils.GameStats;
 
 public class Application extends Game
 {
 	public SpriteBatch batch;
 	public OrthographicCamera camera;
-    public Rectangle viewport;
+
     public BitmapFont gameFont;
     public BitmapFont scoreFont;
     public BitmapFont textFont;
+    public BitmapFont titleFont;
+
     public Vector3 touchPosition;
     public Music gameMusicTrack;
 
@@ -31,68 +34,85 @@ public class Application extends Game
     public HelpScreen help;
     public SettingsScreen settings;
     public GameScreen game;
+    public GameOverScreen gameOver;
+    public TutorialScreen tutorial;
+    public StoreScreen store;
+    public DifficultyScreen difficulty;
+
+
+
 
     private boolean paused;
-	
-	@Override
+    public Viewport viewport;
+
+    Sprite gear;
+
+
+
+
+    @Override
 	public void create () {
+
+        Assets.load();
+
+        Assets.manager.finishLoading();
+        /*while(!Assets.manager.update())
+        {
+            System.out.println(Assets.manager.getProgress() * 100 + "%");
+        }*/
+
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
+        camera.update();
+
+        viewport = new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, camera);
+
         touchPosition = new Vector3();
 
         title = new TitleScreen(this);
         help = new HelpScreen(this);
         settings = new SettingsScreen(this);
         game = new GameScreen(this);
+        gameOver = new GameOverScreen(this);
+        tutorial = new TutorialScreen(this);
+        store = new StoreScreen(this);
+        difficulty = new DifficultyScreen(this);
 
         paused = false;
 
-        gameFont = new BitmapFont(Gdx.files.internal(Constants.ASSETS_PATH + "gameFont.fnt"));
-        scoreFont = new BitmapFont(Gdx.files.internal(Constants.ASSETS_PATH + "scoreFont.fnt"));
-        textFont = new BitmapFont(Gdx.files.internal(Constants.ASSETS_PATH + "scoreFont.fnt"));
 
 
-        gameMusicTrack = Gdx.audio.newMusic(Gdx.files.internal(Constants.MUSIC_PATH + "theBuilder.mp3"));
+        gameFont = Assets.manager.get(Constants.ASSETS_PATH + "gameFont.fnt", BitmapFont.class);
+        scoreFont = Assets.manager.get(Constants.ASSETS_PATH + "scoreFont.fnt", BitmapFont.class);
+        textFont = Assets.manager.get(Constants.ASSETS_PATH + "gameOverText.fnt", BitmapFont.class);
+        titleFont = Assets.manager.get(Constants.ASSETS_PATH + "gameOverTitle.fnt", BitmapFont.class);
+
+        gameMusicTrack = Assets.manager.get(Constants.MUSIC_PATH + "theBuilder.mp3", Music.class);
         gameMusicTrack.setLooping(true);
 
-        setScreen(title);
+        if(Assets.manager.update())
+        {
+            setScreen(difficulty);
+
+        }
+
+
+
 
 	}
 
 	@Override
 	public void render () {
-		super.render();
+
+        super.render();
+
 	}
 
     @Override
     public void resize(int width, int height)
     {
-        //calculate new viewport
-        float aspectRatio = (float)width / (float)height;
-        float scale = 1f;
-        Vector2 crop = new Vector2 (0f, 0f);
-
-        if(aspectRatio > Constants.ASPECT_RATIO )
-        {
-            scale = (float)height /Constants.VIEWPORT_HEIGHT;
-            crop.x = (width - Constants.VIEWPORT_WIDTH * scale) / 2;
-        }
-        else if(aspectRatio < Constants.ASPECT_RATIO)
-        {
-            scale = (float)width / Constants.VIEWPORT_WIDTH;
-            crop.y = (height - Constants.VIEWPORT_HEIGHT * scale) / 2;
-
-        }
-        else
-        {
-            scale = (float)width / Constants.VIEWPORT_WIDTH;
-        }
-
-        float w = Constants.VIEWPORT_WIDTH * scale;
-        float h = Constants.VIEWPORT_HEIGHT * scale;
-
-        viewport = new Rectangle(crop.x, crop.y, w, h);
+        viewport.update(width, height);
 
     }
 
@@ -111,8 +131,23 @@ public class Application extends Game
     @Override
     public void dispose()
     {
+        Assets.dispose();
         gameMusicTrack.dispose();
+
         batch.dispose();
+
+        help.dispose();
+        settings.dispose();
+        game.dispose();
+        gameOver.dispose();
+        title.dispose();
+        store.dispose();
+
+        /*titleFont.dispose();
+        textFont.dispose();
+        gameFont.dispose();
+        scoreFont.dispose();*/
+
     }
 
     public boolean isPaused()
@@ -123,5 +158,71 @@ public class Application extends Game
     public void setPaused(boolean paused)
     {
         this.paused = paused;
+    }
+
+    public void setEasyStats()
+    {
+        GameStats.PIECE_SPEED_MIN = 150.0f;
+        GameStats.PIECE_SPEED_MAX = 300.0f;
+        GameStats.PIECE_SPEED_INCREMENTS = 50.0f;
+        GameStats.PIECE_ADD_POINTS = 10;
+        GameStats.PIECE_SUBSTRACT_POINTS = 5;
+        GameStats.BOMB_SPEED_MIN = 250.0f;
+        GameStats.BOMB_SPEED_MAX = 450.0f;
+        GameStats.BOMB_SPEED_INCREMENTS = 75.0f;
+        GameStats.BOMB_ADD_POINTS = 15;
+        GameStats.BOMB_SUBSTRACT_POINTS = 10;
+        GameStats.COIN_SPEED_MIN = 200.0f;
+        GameStats.COIN_SPEED_MAX = 350.0f;
+        GameStats.COIN_SPEED_INCREMENTS = 50.0f;
+        GameStats.COIN_ADD_POINTS = 5;
+        GameStats.COIN_SUBSTRACT_POINTS = 0;
+        GameStats.DIFFICULTY_EASY = true;
+        GameStats.DIFFICULTY_NORMAL = false;
+        GameStats.DIFFICULTY_HARD = false;
+    }
+
+    public void setNormalStats()
+    {
+        GameStats.PIECE_SPEED_MIN = 300.0f;
+        GameStats.PIECE_SPEED_MAX = 500.0f;
+        GameStats.PIECE_SPEED_INCREMENTS = 100.0f;
+        GameStats.PIECE_ADD_POINTS = 251;
+        GameStats.PIECE_SUBSTRACT_POINTS = 15;
+        GameStats.BOMB_SPEED_MIN = 300.0f;
+        GameStats.BOMB_SPEED_MAX = 700.0f;
+        GameStats.BOMB_SPEED_INCREMENTS = 100.0f;
+        GameStats.BOMB_ADD_POINTS = 15;
+        GameStats.BOMB_SUBSTRACT_POINTS = 20;
+        GameStats.COIN_SPEED_MIN = 300.0f;
+        GameStats.COIN_SPEED_MAX = 650.0f;
+        GameStats.COIN_SPEED_INCREMENTS = 150.0f;
+        GameStats.COIN_ADD_POINTS = 15;
+        GameStats.COIN_SUBSTRACT_POINTS = 0;
+        GameStats.DIFFICULTY_EASY = false;
+        GameStats.DIFFICULTY_NORMAL = true;
+        GameStats.DIFFICULTY_HARD = false;
+    }
+
+    public void setHardStats()
+    {
+        GameStats.PIECE_SPEED_MIN = 350.0f;
+        GameStats.PIECE_SPEED_MAX = 600.0f;
+        GameStats.PIECE_SPEED_INCREMENTS = 150.0f;
+        GameStats.PIECE_ADD_POINTS = 20;
+        GameStats.PIECE_SUBSTRACT_POINTS = 10;
+        GameStats.BOMB_SPEED_MIN = 450.0f;
+        GameStats.BOMB_SPEED_MAX = 900.0f;
+        GameStats.BOMB_SPEED_INCREMENTS = 150.0f;
+        GameStats.BOMB_ADD_POINTS = 25;
+        GameStats.BOMB_SUBSTRACT_POINTS = 25;
+        GameStats.COIN_SPEED_MIN = 550.0f;
+        GameStats.COIN_SPEED_MAX = 850.0f;
+        GameStats.COIN_SPEED_INCREMENTS = 100.0f;
+        GameStats.COIN_ADD_POINTS = 30;
+        GameStats.COIN_SUBSTRACT_POINTS = 0;
+        GameStats.DIFFICULTY_EASY = false;
+        GameStats.DIFFICULTY_NORMAL = false;
+        GameStats.DIFFICULTY_HARD = true;
     }
 }

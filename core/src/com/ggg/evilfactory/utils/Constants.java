@@ -7,12 +7,12 @@ import com.badlogic.gdx.Gdx;
  */
 public class Constants
 {
-    public static final float VIEWPORT_WIDTH = 800.0f;
-    public static final float VIEWPORT_HEIGHT = 480.0f;
+    public static final float VIEWPORT_WIDTH = 2560;
+    public static final float VIEWPORT_HEIGHT = 1600;
     public static final float ASPECT_RATIO = VIEWPORT_WIDTH / VIEWPORT_HEIGHT;
     public static final String MUSIC_PATH = "sound/music/";
     public static final String SOUNDFX_PATH = "sound/fx/";
     public static final String ASSETS_PATH = "images/assets/";
     public static final String FX_PATH = "images/fx/";
-    public static final int BUTTONS_OFFSET = 100;
+    public static final int BUTTONS_OFFSET = 300;
 }

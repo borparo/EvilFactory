@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.MathUtils;
 import com.ggg.evilfactory.game.AbstractPiece;
-import com.ggg.evilfactory.game.Application;
 import com.ggg.evilfactory.utils.Constants;
+import com.ggg.evilfactory.utils.GameStats;
 
 /**
  * Created by borja on 14-9-5.
@@ -27,12 +27,12 @@ public class Coin extends AbstractPiece
     public Coin()
     {
         display();
-        setPosition(new Vector2(Constants.VIEWPORT_WIDTH, 30));
+
         setFrameColumns(8);
         setFrameRows(2);
-        setAddPoints(15);
-        setTakePoints(0);
-        setSpeed(200);
+        setAddPoints(GameStats.COIN_ADD_POINTS);
+        setTakePoints(GameStats.COIN_SUBSTRACT_POINTS);
+        setSpeed(MathUtils.random(GameStats.COIN_SPEED_MIN, GameStats.COIN_SPEED_MAX));
         createFrames();
     }
 

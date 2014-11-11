@@ -26,7 +26,7 @@ public abstract class AbstractPiece implements Displayable
     public AbstractPiece()
     {
 
-        position = new Vector2(Constants.VIEWPORT_WIDTH, 30);
+        position = new Vector2(Constants.VIEWPORT_WIDTH, 100);
         direction = new Vector2(0, 0);
         friction = new Vector2(0, 0);
         speed = 0;
@@ -126,10 +126,12 @@ public abstract class AbstractPiece implements Displayable
     }
 
 
-
-
-
-
+    /**
+     * Method returns true if the screen touch  happens inside the area of the sprite position.
+     * @param game is the main Application
+     * @return true when input touch happens inside the sprite area limited but its position and
+     * width, height
+     */
     public boolean isClicked(Application game)
     {
         if (Gdx.input.justTouched())
@@ -137,12 +139,11 @@ public abstract class AbstractPiece implements Displayable
            game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
            game.camera.unproject(game.touchPosition);
 
-            if (Gdx.input.getX() > getPositionX() &&
-                    Gdx.input.getY() < Constants.VIEWPORT_HEIGHT - getPositionY() &&
-                    Gdx.input.getX() > getPositionX() + getSprite().getWidth() &&
-                    Gdx.input.getY() > Constants.VIEWPORT_HEIGHT -(getPositionY() + getSprite().getHeight()))
+            if (game.touchPosition.x >= getPositionX() &&
+                    game.touchPosition.y >= getPositionY() &&
+                    game.touchPosition.x <= (getPositionX() + getSprite().getWidth()) &&
+                    game.touchPosition.y <= (getPositionY() + getSprite().getHeight()))
             {
-                System.out.println("iS CLICKED");
                 return true;
 
             }

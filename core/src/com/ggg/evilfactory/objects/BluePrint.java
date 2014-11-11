@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.ggg.evilfactory.game.Assets;
 import com.ggg.evilfactory.utils.Constants;
 import com.ggg.evilfactory.utils.ProductTypes;
 
@@ -36,8 +37,8 @@ public class BluePrint
         {
             case 0:
                 // create the sprite blueprint and the list of part needed to be assembled.
-                blueprintSprite = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "bluePrint_weapon.png")));
-                blueprintSprite.setPosition(20, 288);
+                blueprintSprite = new Sprite(Assets.manager.get(Constants.ASSETS_PATH + "bluePrint_weapon.png", Texture.class));
+                blueprintSprite.setPosition(100, 1000);
 
                 for (int i = 0; i < ProductTypes.BasicWeapon.size(); i++)
                 {
@@ -46,8 +47,8 @@ public class BluePrint
                 break;
             case 1:
                 // create the sprite blueprint and the list of part needed to be assembled.
-                blueprintSprite = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "bluePrint_suit.png")));
-                blueprintSprite.setPosition(20, 288);
+                blueprintSprite = new Sprite(Assets.manager.get(Constants.ASSETS_PATH + "bluePrint_suit.png", Texture.class));
+                blueprintSprite.setPosition(100, 1000);
 
                 for (int i = 0; i < ProductTypes.BasicSuit.size(); i++)
                 {
@@ -56,8 +57,8 @@ public class BluePrint
                 break;
             case 2:
                 // create the sprite blueprint and the list of part needed to be assembled.
-                blueprintSprite = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "bluePrint_gadget.png")));
-                blueprintSprite.setPosition(20, 288);
+                blueprintSprite = new Sprite(Assets.manager.get(Constants.ASSETS_PATH + "bluePrint_gadget.png", Texture.class));
+                blueprintSprite.setPosition(100, 1000);
 
                 for (int i = 0; i < ProductTypes.BasicGadget.size(); i++)
                 {

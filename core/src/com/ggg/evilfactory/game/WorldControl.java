@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.ggg.evilfactory.objects.*;
-import com.ggg.evilfactory.utils.Achievements;
+import com.ggg.evilfactory.utils.PlayerStats;
 import com.ggg.evilfactory.utils.Constants;
 
 import java.util.ArrayList;
@@ -27,14 +28,17 @@ public class WorldControl
     private int productStock;
     private long playerScore;
     private int playerCoins;
+    private RandomXS128 random;
     ParticlesManager particlesManager;
 
-    Sound explosion = Gdx.audio.newSound(Gdx.files.internal(Constants.SOUNDFX_PATH + "explosion.wav"));
-    Sound coin = Gdx.audio.newSound(Gdx.files.internal(Constants.SOUNDFX_PATH + "coin.wav"));
-    Sound pickUpYes = Gdx.audio.newSound(Gdx.files.internal(Constants.SOUNDFX_PATH + "pickUpYes.wav"));
-    Sound pickUpNo = Gdx.audio.newSound(Gdx.files.internal(Constants.SOUNDFX_PATH + "pickUpNo.wav"));
+    Sound explosion = Assets.manager.get(Constants.SOUNDFX_PATH + "explosion.wav");
+    Sound coin = Assets.manager.get(Constants.SOUNDFX_PATH + "coin.wav");
+    Sound pickUpYes = Assets.manager.get(Constants.SOUNDFX_PATH + "pickUpYes.wav");
+    Sound pickUpNo = Assets.manager.get(Constants.SOUNDFX_PATH + "pickUpNo.wav");
 
     private long pieceSpawnTime;
+    private long spawnTimeMin;
+    private long spawnTimeMax;
     private long bombExplodingTime;
 
     protected Sprite life1;
@@ -53,11 +57,13 @@ public class WorldControl
     Minion minion1;
     Minion minion2;
     Minion sillyMinion;
+    private float addOnSpeed = 450.0f;
 
     /**
      * Calls the already created main application to use it's delta time, camera, batch etc...
      * PlayerScore is initialized for first time here, inside method will call it's current
      * value to start a new label
+     *
      * @param game is the main game application
      */
     public WorldControl(final Application game)
@@ -65,6 +71,7 @@ public class WorldControl
         this.game = game;
         setPlayerScore(0);
         setPlayerCoins(0);
+        random = new RandomXS128(TimeUtils.millis());
         worldInit();
     }
 
@@ -73,47 +80,59 @@ public class WorldControl
         assembledPieces = new ArrayList<String>();//will compare this list to the blueprint list
         pieceFactory = new PieceFactory();
         particlesManager = new ParticlesManager();
+        spawnTimeMin = 1500;
+        spawnTimeMax = 3000;
         //setPlayerScore(getPlayerScore());
         setProductTarget(MathUtils.random(1, 15));
         setProductStock(0);
-        setPlayerLifes(3);
+
+        if(getPlayerLifes() == 0)
+        {
+            setPlayerLifes(3);
+
+            life1 = new Sprite(Assets.manager.get(Constants.ASSETS_PATH + "life.png", Texture.class));
+            life2 = new Sprite(Assets.manager.get(Constants.ASSETS_PATH + "life.png", Texture.class));
+            life3 = new Sprite(Assets.manager.get(Constants.ASSETS_PATH + "life.png", Texture.class));
+        }
+        else
+        {
+            setPlayerLifes(getPlayerLifes());
+        }
 
 
         //set first bluePrint
         blueprint = new BluePrint();//the blueprint that contains the list of pieces to match
 
-        //set up lifes
+       //position lifes sprites
 
-        life1 = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "life.png")));
-        life2 = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "life.png")));
-        life3 = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "life.png")));
-
-        life1.setPosition(550, 450);
-        life2.setPosition(580, 450);
-        life3.setPosition(610, 450);
+        life1.setPosition(700, 1500);
+        life2.setPosition(800, 1500);
+        life3.setPosition(900, 1500);
 
         //background characters
         minion1 = new Minion();
-        minion1.setPosition(new Vector2(250, 100));
+        minion1.setPosition(new Vector2(Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET, 200));
+
 
         minion2 = new Minion();
         minion2.getAnimationSprite().setSize(minion2.getAnimationSprite().getWidth() * 0.7f,
                 minion2.getAnimationSprite().getHeight() * 0.7f);
-        minion2.setPosition(new Vector2(415, 220));
+        minion2.setPosition(new Vector2(Constants.VIEWPORT_WIDTH / 2 +  Constants.BUTTONS_OFFSET / 2, 750));
+
 
 
         sillyMinion = new Minion();
-        sillyMinion.setAnimationSprite(new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "minion_silly.png"))));
+        sillyMinion.setAnimationSprite(new Sprite(Assets.manager.get(Constants.ASSETS_PATH + "minion_silly.png", Texture.class)));
         sillyMinion.createFrames();
-        sillyMinion.setPosition(new Vector2(400, 145));
+        sillyMinion.setPosition(new Vector2(Constants.VIEWPORT_WIDTH / 2, 455));
 
 
     }
 
     public void update(float deltaTime)
     {
-        //when time is done create randomly a piece of type (1 = weapon, 2 = suit, 3 = gadget, 0 = bomb)
-        if (TimeUtils.millis() - pieceSpawnTime > MathUtils.random(1500, 3000))
+        //when time is done create randomly a piece of type (1 = weapon, 2 = suit, 3 = gadget,, 4 = coin,  0 = bomb)
+        if (TimeUtils.millis() - pieceSpawnTime > MathUtils.random(spawnTimeMin, spawnTimeMax))
         {
             choosePieceType();
 
@@ -151,33 +170,40 @@ public class WorldControl
                 piece.getSprite().setColor(Color.WHITE);
             }
 
-            //when piece is touched, delete it and add name to the assembled parts list
+
+            //For pieces, if  they are touched, delete it and add name to the assembled parts list
+            // always they are not a coin or a bomb. If its coin add coin value, if bomb it's a bomb
+            // before it explodes add points, else take away one life and points.
             if (Gdx.input.justTouched())
             {
                 game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
                 game.camera.unproject(game.touchPosition);
 
-                if (Gdx.input.getX() > piece.getSprite().getX() &&
-                        Gdx.input.getX() < piece.getSprite().getX() + piece.getSprite().getWidth() &&
-                        Gdx.input.getY() < Constants.VIEWPORT_HEIGHT - piece.getSprite().getY() &&
-                        Gdx.input.getY() > Constants.VIEWPORT_HEIGHT - (piece.getSprite().getY() + piece.getSprite().getHeight()))
+                if (game.touchPosition.x > piece.getSprite().getX() &&
+                        game.touchPosition.x < piece.getSprite().getX() + piece.getSprite().getWidth()  &&
+                        game.touchPosition.y > piece.getSprite().getY() &&
+                        game.touchPosition.y < (piece.getSprite().getY() + piece.getSprite().getHeight()))
                 {
 
                     iter.remove();
 
-                    //COINS
+                    //COINS. Add points and money. Play sound
 
-                    if(piece instanceof Coin)
+                    if (piece instanceof Coin)
                     {
                         setPlayerCoins(getPlayerCoins() + piece.getAddPoints());
                         setPlayerScore(getPlayerScore() + piece.getAddPoints());
-                        coin.play(1.0f);
-                        ParticlesManager.coinGotten.setPosition(piece.getPositionX(), 75);
+
+                        ParticlesManager.coinGotten.setPosition(piece.getPositionX(), 150);
                         ParticlesManager.coinGotten.start();
+                        if(PlayerStats.SOUND_FX)
+                        {
+                            coin.play(1.0f);
+                        }
                     }
 
                     //check active blueprint, add points if piece is not yet assembled, else take points from player
-                    //piece name is in blueprint and not assembled yet and is not a bomb
+                    //piece name is in blueprint and is not a bomb, add it's name to assembling list
                     if (blueprint.blueprintParts.contains(piece.getName()) &&
                             !assembledPieces.contains(piece.getName()) &&
                             !(piece instanceof Bomb) &&
@@ -185,29 +211,46 @@ public class WorldControl
                     {
                         assembledPieces.add(piece.getName());
                         setPlayerScore(getPlayerScore() + piece.getAddPoints());
-                        pickUpYes.play(1.0f);
+                        setPlayerCoins(getPlayerCoins() + 1);
+
+                        if(PlayerStats.SOUND_FX)
+                        {
+                            pickUpYes.play(1.0f);
+                        }
                     }
                     //piece name is in blueprint but already assembled and is not a bomb
                     else if (assembledPieces.contains(piece.getName()) &&
-                           !( piece instanceof Bomb ) && !(piece instanceof Coin))
+                            !(piece instanceof Bomb) && !(piece instanceof Coin))
                     {
                         setPlayerScore(getPlayerScore() - piece.getTakePoints());
-                        pickUpNo.play(1.0f);
+
+                        if(PlayerStats.SOUND_FX)
+                        {
+                            pickUpNo.play(1.0f);
+                        }
                     }
                     //piece name is not in blue print and is not a bomb
-                    else if(!blueprint.blueprintParts.contains(piece.getName()) &&
-                            !(piece instanceof  Bomb) && !(piece instanceof Coin))
+                    else if (!blueprint.blueprintParts.contains(piece.getName()) &&
+                            !(piece instanceof Bomb) && !(piece instanceof Coin))
                     {
                         setPlayerScore(getPlayerScore() - piece.getTakePoints());
-                        pickUpNo.play(1.0f);
+
+                        if(PlayerStats.SOUND_FX)
+                        {
+                            pickUpNo.play(1.0f);
+                        }
                     }
                     //if we click on a bomb before explosion add points. TODO BONUSES
-                    else if(piece instanceof Bomb)
+                    else if (piece instanceof Bomb)
                     {
                         ParticlesManager.bombSave.setPosition(piece.getPositionX(), 75);
                         ParticlesManager.bombSave.start();
                         setPlayerScore(getPlayerScore() + piece.getAddPoints());
-                        pickUpYes.play(1.0f);
+
+                        if(PlayerStats.SOUND_FX)
+                        {
+                            pickUpYes.play(1.0f);
+                        }
                     }
 
 
@@ -219,20 +262,33 @@ public class WorldControl
                     {
                         setProductStock(getProductStock() + 1);
                         assembledPieces.clear();
-                        piece.setSpeed(piece.getSpeed() + 65);
+                        piece.setSpeed(piece.getSpeed() + addOnSpeed);
+                        if (spawnTimeMax > spawnTimeMin)
+                        {
+                            spawnTimeMax -= (spawnTimeMax / getProductTarget());
+                        }
+                        else if(spawnTimeMax <= spawnTimeMin)
+                        {
+                            spawnTimeMax = spawnTimeMin;
+                        }
                     }
 
                     //level complete TODO- ADD BONUSES FOR PLAYER
-                    if(getProductStock() == getProductTarget())
+                    if (getProductStock() == getProductTarget())
                     {
-                        Achievements.LEVEL_COMPLETE = true;
+                        PlayerStats.LEVEL_COMPLETE = true;
                         setPlayerScore(getPlayerScore() + 300);
                     }
 
-                    if(Achievements.LEVEL_COMPLETE) //TODO check achievements completed-
+                    if (PlayerStats.LEVEL_COMPLETE) //TODO check achievements completed-
                     {
+                        game.setPaused(true);
+                        //TODO save money to file. Display level complete message.
+                        PlayerStats.PLAYER_SAVED_MONEY += getPlayerCoins();
+                        PlayerStats.CURRENT_SCORE += getPlayerScore();
+                        game.setScreen(game.store);
                         worldInit();
-                        Achievements.LEVEL_COMPLETE = false;
+                        PlayerStats.LEVEL_COMPLETE = false;
 
                     }
                 }
@@ -245,15 +301,18 @@ public class WorldControl
                 if (piece instanceof Bomb)
                 {
 
-                    ParticlesManager.bombExplosion.setPosition(piece.getSprite().getX() + piece.getSprite().getWidth() / 2, 75);
+                    ParticlesManager.bombExplosion.setPosition(piece.getSprite().getX() + piece.getSprite().getWidth() / 2, 150);
                     ParticlesManager.bombExplosion.start();
 
-                    explosion.play(1.0f);
+                    if(PlayerStats.SOUND_FX)
+                    {
+                        explosion.play(1.0f);
+                    }
 
                     setPlayerScore(getPlayerScore() - piece.getTakePoints());
                     setPlayerLifes(getPlayerLifes() - 1);
                     setPlayerCoins(getPlayerCoins() - piece.getTakePoints());
-                    if(getPlayerCoins() <= 0)
+                    if (getPlayerCoins() <= 0)
                     {
                         setPlayerCoins(0);
                     }
@@ -262,20 +321,23 @@ public class WorldControl
 
                     if (playerLifes == 2)
                     {
-                        life1.setTexture(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "lifeNo.png")));
+                        life1.setTexture(Assets.manager.get(Constants.ASSETS_PATH + "lifeNo.png", Texture.class));
                     }
                     else if (playerLifes == 1)
                     {
-                        life2.setTexture(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "lifeNo.png")));
+                        life2.setTexture(Assets.manager.get(Constants.ASSETS_PATH + "lifeNo.png", Texture.class));
                     }
                     else if (playerLifes <= 0) //game over
                     {
-                        life3.setTexture(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "lifeNo.png")));
+                        life3.setTexture(Assets.manager.get(Constants.ASSETS_PATH + "lifeNo.png", Texture.class));
                         setPlayerCoins(0);
 
-                        //pause game
+                        //setGameOverScreen
 
-                        game.setPaused(true);
+                        game.setScreen(game.gameOver);
+
+
+
                     }
 
                     iter.remove();
@@ -285,7 +347,6 @@ public class WorldControl
             }
 
         }
-
 
 
     }
@@ -298,7 +359,7 @@ public class WorldControl
 
     private void choosePieceType()
     {
-        switch (MathUtils.random(0, 4))
+        switch (random.nextInt(5))
         {
             case 0:
                 producedParts.add(PieceFactory.getPieceType("Weapon"));

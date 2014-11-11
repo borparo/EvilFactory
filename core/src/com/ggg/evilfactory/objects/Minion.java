@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.ggg.evilfactory.game.Application;
+import com.ggg.evilfactory.game.Assets;
 import com.ggg.evilfactory.utils.Constants;
 
 /**
@@ -31,12 +32,9 @@ public class Minion
         position = new Vector2(0, 0);
         setFrameColumns(4);
         setFrameRows(1);
-        setAnimationSprite(new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "minion.png"))));
-
+        setAnimationSprite(new Sprite(Assets.manager.get(Constants.ASSETS_PATH + "minion.png", Texture.class)));
 
         createFrames();
-
-
     }
 
     public Sprite getAnimationSprite()
@@ -108,6 +106,6 @@ public class Minion
 
     public void dispose()
     {
-        getAnimationSprite().getTexture().dispose();
+
     }
 }

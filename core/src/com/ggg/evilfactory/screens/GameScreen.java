@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.ggg.evilfactory.game.Application;
 import com.ggg.evilfactory.game.WorldControl;
 import com.ggg.evilfactory.game.WorldRender;
+import com.ggg.evilfactory.utils.PlayerStats;
 
 /**
  * Created by borja on 14-8-27.
@@ -28,8 +29,8 @@ public class GameScreen implements Screen
         game.camera.update();
 
         // set viewport
-        Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
-                (int) game.viewport.width, (int) game.viewport.height);
+        Gdx.gl.glViewport(game.viewport.getScreenX(),  game.viewport.getScreenY(),
+                game.viewport.getScreenWidth(), game.viewport.getScreenHeight());
 
         //update the game if is not paused
         if(!game.isPaused())
@@ -58,12 +59,16 @@ public class GameScreen implements Screen
         worldControl = new WorldControl(game);
         worldRender = new WorldRender(worldControl, game);
         Gdx.input.setCatchBackKey(true);
+        if(!game.gameMusicTrack.isPlaying() && PlayerStats.MUSIC_ON == true)
+        {
+            game.gameMusicTrack.play();
+        }
     }
 
     @Override
     public void hide()
     {
-
+        worldRender.dispose();
     }
 
     @Override
