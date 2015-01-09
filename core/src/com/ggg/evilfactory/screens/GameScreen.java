@@ -11,16 +11,22 @@ import com.ggg.evilfactory.utils.PlayerStats;
 /**
  * Created by borja on 14-8-27.
  */
-public class GameScreen implements Screen
+public class GameScreen extends AbstractScreen
 {
-    final Application game;
+
 
     private WorldControl worldControl;
     private WorldRender worldRender;
 
     public GameScreen(final Application game)
     {
-        this.game = game;
+        super(game);
+    }
+
+    @Override
+    public void update(float delta)
+    {
+
     }
 
     @Override
@@ -47,11 +53,6 @@ public class GameScreen implements Screen
 
     }
 
-    @Override
-    public void resize(int width, int height)
-    {
-
-    }
 
     @Override
     public void show()
@@ -71,17 +72,6 @@ public class GameScreen implements Screen
         worldRender.dispose();
     }
 
-    @Override
-    public void pause()
-    {
-
-    }
-
-    @Override
-    public void resume()
-    {
-
-    }
 
     @Override
     public void dispose()

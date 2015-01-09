@@ -11,9 +11,9 @@ import com.ggg.evilfactory.utils.Constants;
 /**
  * Created by borja on 14-9-1.
  */
-public class TutorialScreen implements Screen
+public class TutorialScreen extends AbstractScreen
 {
-    final Application game;
+
     Sprite bg;
     Sprite piece;
     Sprite blueprint;
@@ -21,9 +21,11 @@ public class TutorialScreen implements Screen
 
     public TutorialScreen(final Application game)
     {
-        this.game = game;
+        super(game);
         initTutorial();
     }
+
+
 
     private void initTutorial()
     {
@@ -31,6 +33,12 @@ public class TutorialScreen implements Screen
         piece = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "w_Barrel.png")));
         bomb = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "bomb.png")));
         blueprint = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "bluePrint_weapon.png")));
+    }
+
+    @Override
+    public void update(float delta)
+    {
+
     }
 
     @Override
@@ -59,36 +67,6 @@ public class TutorialScreen implements Screen
         game.gameFont.draw(game.batch,"Help your minions", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1150);
 
         game.batch.end();
-    }
-
-    @Override
-    public void resize(int width, int height)
-    {
-
-    }
-
-    @Override
-    public void show()
-    {
-
-    }
-
-    @Override
-    public void hide()
-    {
-
-    }
-
-    @Override
-    public void pause()
-    {
-
-    }
-
-    @Override
-    public void resume()
-    {
-
     }
 
     @Override

@@ -15,9 +15,8 @@ import com.ggg.evilfactory.utils.PlayerStats;
 /**
  * Created by borja on 14-8-27.
  */
-public class TitleScreen implements Screen
+public class TitleScreen extends AbstractScreen
 {
-    final Application game;
 
     private Texture bgTexture;
     private Texture playTexture;
@@ -34,9 +33,11 @@ public class TitleScreen implements Screen
     Minion minion;
     Minion sillyMinion;
 
+
+
     public TitleScreen(final Application game)
     {
-        this.game = game;
+        super(game);
 
         bg = new Sprite(Assets.manager.get(Constants.ASSETS_PATH +"bgTitle.png", Texture.class ));
         //buttons
@@ -55,37 +56,10 @@ public class TitleScreen implements Screen
         sillyMinion.setAnimationSprite(new Sprite(Assets.manager.get(Constants.ASSETS_PATH + "minion_silly.png", Texture.class)));
         sillyMinion.createFrames();
     }
+
     @Override
-    public void render(float delta)
+    public void update (float delta)
     {
-        // update camera
-       game.camera.update();
-
-
-        // set viewport
-        Gdx.gl.glViewport( game.viewport.getScreenX(),  game.viewport.getScreenY(),
-                game.viewport.getScreenWidth(), game.viewport.getScreenHeight());
-
-        Gdx.gl.glClearColor(0.65f, 0.65f, 0.85f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        //game.camera.update();
-
-        game.batch.setProjectionMatrix(game.camera.combined);
-
-        game.batch.begin();
-
-        bg.draw(game.batch);
-        play.draw(game.batch);
-        quit.draw(game.batch);
-        help.draw(game.batch);
-        settings.draw(game.batch);
-
-        minion.render(delta, game);
-        sillyMinion.render(delta,game);
-
-        game.batch.end();
-
         //PLAY BUTTON
         if(Gdx.input.justTouched())
         {
@@ -101,7 +75,7 @@ public class TitleScreen implements Screen
                 //SET PLAY SCREEN
                 if (!PlayerStats.TUTORIAL_COMPLETE)
                 {
-                   game.setScreen(game.tutorial);
+                    game.setScreen(game.tutorial);
                 }
                 else
                 {
@@ -158,6 +132,40 @@ public class TitleScreen implements Screen
                 game.setScreen(game.help);
             }
         }
+    }
+
+    @Override
+    public void render(float delta)
+    {
+        // update camera and method
+       game.camera.update();
+        update(delta);
+
+        // set viewport
+        Gdx.gl.glViewport( game.viewport.getScreenX(),  game.viewport.getScreenY(),
+                game.viewport.getScreenWidth(), game.viewport.getScreenHeight());
+
+        Gdx.gl.glClearColor(0.65f, 0.65f, 0.85f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //game.camera.update();
+
+        game.batch.setProjectionMatrix(game.camera.combined);
+
+        game.batch.begin();
+
+        bg.draw(game.batch);
+        play.draw(game.batch);
+        quit.draw(game.batch);
+        help.draw(game.batch);
+        settings.draw(game.batch);
+
+        minion.render(delta, game);
+        sillyMinion.render(delta,game);
+
+        game.batch.end();
+
+
 
     }
 
