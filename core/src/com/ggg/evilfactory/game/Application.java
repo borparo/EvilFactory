@@ -225,4 +225,98 @@ public class Application extends Game
         GameStats.DIFFICULTY_NORMAL = false;
         GameStats.DIFFICULTY_HARD = true;
     }
+
+    //SETTERS
+    public void setBatch(SpriteBatch batch)
+    {
+        this.batch = batch;
+    }
+
+    public void setCamera(OrthographicCamera camera)
+    {
+        this.camera = camera;
+    }
+
+    public void setGameFont(BitmapFont gameFont)
+    {
+        this.gameFont = gameFont;
+    }
+
+    public void setScoreFont(BitmapFont scoreFont)
+    {
+        this.scoreFont = scoreFont;
+    }
+
+    public void setTextFont(BitmapFont textFont)
+    {
+        this.textFont = textFont;
+    }
+
+    public void setTitleFont(BitmapFont titleFont)
+    {
+        this.titleFont = titleFont;
+    }
+
+    public void setTouchPosition(Vector3 touchPosition)
+    {
+        this.touchPosition = touchPosition;
+    }
+
+    public void setGameMusicTrack(Music gameMusicTrack)
+    {
+        this.gameMusicTrack = gameMusicTrack;
+    }
+
+    public void setViewport(Viewport viewport)
+    {
+        this.viewport = viewport;
+    }
+
+    //GETTERS
+
+
+    public SpriteBatch getBatch()
+    {
+        return batch;
+    }
+
+    public OrthographicCamera getCamera()
+    {
+        return camera;
+    }
+
+    public BitmapFont getGameFont()
+    {
+        return gameFont;
+    }
+
+    public BitmapFont getScoreFont()
+    {
+        return scoreFont;
+    }
+
+    public BitmapFont getTextFont()
+    {
+        return textFont;
+    }
+
+    public BitmapFont getTitleFont()
+    {
+        return titleFont;
+    }
+
+    public Vector3 getTouchPosition()
+    {
+        return touchPosition;
+    }
+
+    public Music getGameMusicTrack()
+    {
+        return gameMusicTrack;
+    }
+
+    public Viewport getViewport()
+    {
+        return viewport;
+    }
 }

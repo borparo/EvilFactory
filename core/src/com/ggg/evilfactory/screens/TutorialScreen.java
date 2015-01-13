@@ -19,6 +19,8 @@ public class TutorialScreen extends AbstractScreen
     Sprite blueprint;
     Sprite bomb;
 
+    boolean touched;
+
     public TutorialScreen(final Application game)
     {
         super(game);
@@ -33,12 +35,27 @@ public class TutorialScreen extends AbstractScreen
         piece = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "w_Barrel.png")));
         bomb = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "bomb.png")));
         blueprint = new Sprite(new Texture(Gdx.files.internal(Constants.ASSETS_PATH + "bluePrint_weapon.png")));
+        touched = false;
+
+        piece.setPosition(Constants.VIEWPORT_WIDTH,100);
     }
 
     @Override
     public void update(float delta)
     {
+        //touch position
 
+        //move piece from the right to the screen center
+        if (piece.getX() > Constants.VIEWPORT_WIDTH - (piece.getWidth() / 2)  )
+        {
+            piece.setPosition((piece.getX() - 25) * delta, 100);
+        }
+
+        if(Gdx.input.isTouched())
+        {
+            game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.getCamera().unproject(game.touchPosition);
+        }
     }
 
     @Override
