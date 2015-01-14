@@ -66,7 +66,7 @@ public class Minion
     {
         stateTime += deltaTime;
         currentFrame = idle.getKeyFrame(stateTime, true);
-        game.batch.draw(currentFrame, position.x, position.y);
+        game.getBatch().draw(currentFrame, position.x, position.y);
     }
 
     public void setFrameRows(int frameRows)

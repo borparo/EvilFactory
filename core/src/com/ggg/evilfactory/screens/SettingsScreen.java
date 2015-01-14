@@ -55,7 +55,7 @@ public class SettingsScreen extends AbstractScreen
                     game.getTouchPosition().y < 1200)
             {
                 PlayerStats.MUSIC_ON = true;
-                game.gameMusicTrack.play();
+                game.getGameMusicTrack().play();
             }
 
             //MUSIC NO BUTTON
@@ -64,7 +64,7 @@ public class SettingsScreen extends AbstractScreen
                     game.getTouchPosition().y > 1000 &&
                     game.getTouchPosition().y < 1200)
             {
-                game.gameMusicTrack.pause();
+                game.getGameMusicTrack().pause();
                 PlayerStats.MUSIC_ON = false;
             }
 
@@ -140,20 +140,20 @@ public class SettingsScreen extends AbstractScreen
      */
     private void setDifficultyLevelColor()
     {
-        if (GameStats.DIFFICULTY_EASY == true)
+        if (GameStats.DIFFICULTY_EASY)
         {
             easy.setColor(Color.WHITE);
             normal.setColor(Color.DARK_GRAY);
             hard.setColor(Color.DARK_GRAY);
         }
 
-        else if (GameStats.DIFFICULTY_NORMAL == true)
+        else if (GameStats.DIFFICULTY_NORMAL)
         {
             easy.setColor(Color.DARK_GRAY);
             normal.setColor(Color.WHITE);
             hard.setColor(Color.DARK_GRAY);
         }
-        else if (GameStats.DIFFICULTY_HARD == true)
+        else if (GameStats.DIFFICULTY_HARD)
         {
             easy.setColor(Color.DARK_GRAY);
             normal.setColor(Color.DARK_GRAY);
@@ -187,13 +187,13 @@ public class SettingsScreen extends AbstractScreen
         bg.draw(game.getBatch());
         back.draw(game.getBatch());
 
-        game.textFont.draw(game.getBatch(), "Music:", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1200);
-        game.textFont.draw(game.getBatch(), "YES", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2, 1200);
-        game.textFont.draw(game.getBatch(), "NO", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2, 1200);
+        game.getTextFont().draw(game.getBatch(), "Music:", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1200);
+        game.getTextFont().draw(game.getBatch(), "YES", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2, 1200);
+        game.getTextFont().draw(game.getBatch(), "NO", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2, 1200);
 
-        game.textFont.draw(game.getBatch(), "SoundFX:", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 900);
-        game.textFont.draw(game.getBatch(), "YES", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2, 900);
-        game.textFont.draw(game.getBatch(), "NO", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2, 900);
+        game.getTextFont().draw(game.getBatch(), "SoundFX:", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 900);
+        game.getTextFont().draw(game.getBatch(), "YES", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2, 900);
+        game.getTextFont().draw(game.getBatch(), "NO", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2, 900);
 
         easy.draw(game.getBatch());
         normal.draw(game.getBatch());

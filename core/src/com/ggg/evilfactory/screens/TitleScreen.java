@@ -180,7 +180,7 @@ public class TitleScreen extends AbstractScreen
     {
         if(PlayerStats.MUSIC_ON)
         {
-            game.gameMusicTrack.play();
+            game.getGameMusicTrack().play();
         }
 
         play.setPosition(Constants.VIEWPORT_WIDTH / 2 - play.getWidth() / 2,

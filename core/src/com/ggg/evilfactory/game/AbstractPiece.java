@@ -136,13 +136,13 @@ public abstract class AbstractPiece implements Displayable
     {
         if (Gdx.input.justTouched())
         {
-           game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-           game.camera.unproject(game.touchPosition);
+           game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
+           game.getCamera().unproject(game.getTouchPosition());
 
-            if (game.touchPosition.x >= getPositionX() &&
-                    game.touchPosition.y >= getPositionY() &&
-                    game.touchPosition.x <= (getPositionX() + getSprite().getWidth()) &&
-                    game.touchPosition.y <= (getPositionY() + getSprite().getHeight()))
+            if (game.getTouchPosition().x >= getPositionX() &&
+                    game.getTouchPosition().y >= getPositionY() &&
+                    game.getTouchPosition().x <= (getPositionX() + getSprite().getWidth()) &&
+                    game.getTouchPosition().y <= (getPositionY() + getSprite().getHeight()))
             {
                 return true;
 

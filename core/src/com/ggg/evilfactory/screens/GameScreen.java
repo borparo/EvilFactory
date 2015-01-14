@@ -32,11 +32,11 @@ public class GameScreen extends AbstractScreen
     @Override
     public void render(float delta)
     { // update camera
-        game.camera.update();
+        game.getCamera().update();
 
         // set viewport
-        Gdx.gl.glViewport(game.viewport.getScreenX(),  game.viewport.getScreenY(),
-                game.viewport.getScreenWidth(), game.viewport.getScreenHeight());
+        Gdx.gl.glViewport(game.getViewport().getScreenX(),  game.getViewport().getScreenY(),
+                game.getViewport().getScreenWidth(), game.getViewport().getScreenHeight());
 
         //update the game if is not paused
         if(!game.isPaused())
@@ -46,7 +46,7 @@ public class GameScreen extends AbstractScreen
         Gdx.gl.glClearColor(0.65f, 0.65f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.camera.update();
+        game.getCamera().update();
 
         //render the game
         worldRender.render(delta);
@@ -60,9 +60,9 @@ public class GameScreen extends AbstractScreen
         worldControl = new WorldControl(game);
         worldRender = new WorldRender(worldControl, game);
         Gdx.input.setCatchBackKey(true);
-        if(!game.gameMusicTrack.isPlaying() && PlayerStats.MUSIC_ON == true)
+        if(!game.getGameMusicTrack().isPlaying() && PlayerStats.MUSIC_ON)
         {
-            game.gameMusicTrack.play();
+            game.getGameMusicTrack().play();
         }
     }
 

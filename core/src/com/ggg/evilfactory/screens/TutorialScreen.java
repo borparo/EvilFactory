@@ -54,7 +54,7 @@ public class TutorialScreen extends AbstractScreen
         if(Gdx.input.isTouched())
         {
             game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.getCamera().unproject(game.touchPosition);
+            game.getCamera().unproject(game.getTouchPosition());
         }
     }
 
@@ -62,26 +62,26 @@ public class TutorialScreen extends AbstractScreen
     public void render(float delta)
     {
         // update camera
-        game.camera.update();
+        game.getCamera().update();
 
 
         // set viewport
-        Gdx.gl.glViewport( game.viewport.getScreenX(),  game.viewport.getScreenY(),
-                game.viewport.getScreenWidth(), game.viewport.getScreenHeight());
+        Gdx.gl.glViewport( game.getViewport().getScreenX(),  game.getViewport().getScreenY(),
+                game.getViewport().getScreenWidth(), game.getViewport().getScreenHeight());
 
         Gdx.gl.glClearColor(0.65f, 0.65f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.camera.update();
+        game.getCamera().update();
 
-        game.getBatch().setProjectionMatrix(game.camera.combined);
+        game.getBatch().setProjectionMatrix(game.getCamera().combined);
 
         game.getBatch().begin();
 
         bg.draw(game.getBatch());
 
-        game.gameFont.draw(game.getBatch(),"Welcome!", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1350);
-        game.gameFont.draw(game.getBatch(),"Help your minions", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1150);
+        game.getGameFont().draw(game.getBatch(),"Welcome!", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1350);
+        game.getGameFont().draw(game.getBatch(),"Help your minions", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1150);
 
         game.getBatch().end();
     }
