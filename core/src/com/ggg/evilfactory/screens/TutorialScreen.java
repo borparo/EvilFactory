@@ -74,16 +74,16 @@ public class TutorialScreen extends AbstractScreen
 
         game.camera.update();
 
-        game.batch.setProjectionMatrix(game.camera.combined);
+        game.getBatch().setProjectionMatrix(game.camera.combined);
 
-        game.batch.begin();
+        game.getBatch().begin();
 
-        bg.draw(game.batch);
+        bg.draw(game.getBatch());
 
-        game.gameFont.draw(game.batch,"Welcome!", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1350);
-        game.gameFont.draw(game.batch,"Help your minions", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1150);
+        game.gameFont.draw(game.getBatch(),"Welcome!", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1350);
+        game.gameFont.draw(game.getBatch(),"Help your minions", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1150);
 
-        game.batch.end();
+        game.getBatch().end();
     }
 
     @Override

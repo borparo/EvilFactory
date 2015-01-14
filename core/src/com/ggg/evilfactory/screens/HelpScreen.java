@@ -40,13 +40,13 @@ public class HelpScreen extends AbstractScreen
 
         if (Gdx.input.justTouched())
         {
-            game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(game.touchPosition);
+            game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.getCamera().unproject(game.getTouchPosition());
 
-            if (game.touchPosition.x > next.getX() &&
-                    game.touchPosition.x < next.getX() + next.getWidth() &&
-                    game.touchPosition.y > next.getY() &&
-                    game.touchPosition.y < (next.getY() + next.getHeight()))
+            if (game.getTouchPosition().x > next.getX() &&
+                    game.getTouchPosition().x < next.getX() + next.getWidth() &&
+                    game.getTouchPosition().y > next.getY() &&
+                    game.getTouchPosition().y < (next.getY() + next.getHeight()))
             {
                 helpbg.setTexture(page2);
                 next.setAlpha(0);
@@ -58,13 +58,13 @@ public class HelpScreen extends AbstractScreen
 
         if (Gdx.input.justTouched())
         {
-            game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(game.touchPosition);
+            game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.getCamera().unproject(game.getTouchPosition());
 
-            if (game.touchPosition.x > back.getX() &&
-                    game.touchPosition.x < back.getX() + back.getWidth() &&
-                    game.touchPosition.y > back.getY() &&
-                    game.touchPosition.y < (back.getY() + back.getHeight()))
+            if (game.getTouchPosition().x > back.getX() &&
+                    game.getTouchPosition().x < back.getX() + back.getWidth() &&
+                    game.getTouchPosition().y > back.getY() &&
+                    game.getTouchPosition().y < (back.getY() + back.getHeight()))
             {
                 if (helpbg.getTexture() == page1)
                 {
@@ -85,67 +85,33 @@ public class HelpScreen extends AbstractScreen
     public void render(float delta)
     {
         // update camera
-        game.camera.update();
+        game.getCamera().update();
 
         update(delta);
 
 
         // set viewport
-        Gdx.gl.glViewport(game.viewport.getScreenX(), game.viewport.getScreenY(),
-                game.viewport.getScreenWidth(), game.viewport.getScreenHeight());
+        Gdx.gl.glViewport(game.getViewport().getScreenX(), game.getViewport().getScreenY(),
+                game.getViewport().getScreenWidth(), game.getViewport().getScreenHeight());
 
         Gdx.gl.glClearColor(0.65f, 0.65f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.camera.update();
+        game.getCamera().update();
 
-        game.batch.setProjectionMatrix(game.camera.combined);
+        game.getBatch().setProjectionMatrix(game.getCamera().combined);
 
-        game.batch.begin();
+        game.getBatch().begin();
 
-        helpbg.draw(game.batch);
-        back.draw(game.batch);
-        next.draw(game.batch);
-
-
-        game.batch.end();
+        helpbg.draw(game.getBatch());
+        back.draw(game.getBatch());
+        next.draw(game.getBatch());
 
 
-    }
+        game.getBatch().end();
 
-    @Override
-    public void resize(int width, int height)
-    {
 
     }
 
-    @Override
-    public void show()
-    {
 
-    }
-
-    @Override
-    public void hide()
-    {
-
-    }
-
-    @Override
-    public void pause()
-    {
-
-    }
-
-    @Override
-    public void resume()
-    {
-
-    }
-
-    @Override
-    public void dispose()
-    {
-
-    }
 }

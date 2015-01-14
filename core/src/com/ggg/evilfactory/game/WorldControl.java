@@ -176,13 +176,13 @@ public class WorldControl
             // before it explodes add points, else take away one life and points.
             if (Gdx.input.justTouched())
             {
-                game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                game.camera.unproject(game.touchPosition);
+                game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                game.getCamera().unproject(game.getTouchPosition());
 
-                if (game.touchPosition.x > piece.getSprite().getX() &&
-                        game.touchPosition.x < piece.getSprite().getX() + piece.getSprite().getWidth()  &&
-                        game.touchPosition.y > piece.getSprite().getY() &&
-                        game.touchPosition.y < (piece.getSprite().getY() + piece.getSprite().getHeight()))
+                if (game.getTouchPosition().x > piece.getSprite().getX() &&
+                        game.getTouchPosition().x < piece.getSprite().getX() + piece.getSprite().getWidth()  &&
+                        game.getTouchPosition().y > piece.getSprite().getY() &&
+                        game.getTouchPosition().y < (piece.getSprite().getY() + piece.getSprite().getHeight()))
                 {
 
                     iter.remove();

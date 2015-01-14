@@ -1,12 +1,8 @@
 package com.ggg.evilfactory.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Disposable;
-import com.ggg.evilfactory.objects.Coin;
 import com.ggg.evilfactory.objects.ParticlesManager;
 import com.ggg.evilfactory.utils.Constants;
 
@@ -41,11 +37,11 @@ public class WorldRender implements Disposable
     public void render(float deltaTime)
     {
 
-        game.batch.setProjectionMatrix(game.camera.combined);
-        game.batch.begin();
+        game.getBatch().setProjectionMatrix(game.getCamera().combined);
+        game.getBatch().begin();
 
-        bg.draw(game.batch);
-        coin.draw(game.batch);
+        bg.draw(game.getBatch());
+        coin.draw(game.getBatch());
 
         worldControl.minion1.render(deltaTime, game);
         worldControl.minion2.render(deltaTime, game);
@@ -59,27 +55,27 @@ public class WorldRender implements Disposable
             {
                 System.out.println(piece.getAddPoints());
             }
-                piece.draw(game.batch);
+                piece.draw(game.getBatch());
         }
 
         //render particles
-        ParticlesManager.bombExplosion.draw(game.batch, deltaTime);
-        ParticlesManager.bombSave.draw(game.batch, deltaTime);
-        ParticlesManager.coinGotten.draw(game.batch, deltaTime);
+        ParticlesManager.bombExplosion.draw(game.getBatch(), deltaTime);
+        ParticlesManager.bombSave.draw(game.getBatch(), deltaTime);
+        ParticlesManager.coinGotten.draw(game.getBatch(), deltaTime);
 
         //render lifes
-        worldControl.life1.draw(game.batch);
-        worldControl.life2.draw(game.batch);
-        worldControl.life3.draw(game.batch);
+        worldControl.life1.draw(game.getBatch());
+        worldControl.life2.draw(game.getBatch());
+        worldControl.life3.draw(game.getBatch());
 
         //render fonts
-        game.gameFont.draw(game.batch,"Target: " + worldControl.getProductTarget(),
+        game.getGameFont().draw(game.getBatch(),"Target: " + worldControl.getProductTarget(),
                 Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1390);
-        game.gameFont.draw(game.batch, "Stock: " + worldControl.getProductStock(),
+        game.getGameFont().draw(game.getBatch(), "Stock: " + worldControl.getProductStock(),
                 Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1275);
-        game.gameFont.draw(game.batch, "" + worldControl.getPlayerCoins(),
+        game.getGameFont().draw(game.getBatch(), "" + worldControl.getPlayerCoins(),
                 Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET, 1000);
-        game.scoreFont.draw(game.batch, "" + worldControl.getPlayerScore(),
+        game.getScoreFont().draw(game.getBatch(), "" + worldControl.getPlayerScore(),
                 Constants.VIEWPORT_WIDTH  - Constants.BUTTONS_OFFSET * 3,
                 Constants.VIEWPORT_HEIGHT);
 
@@ -93,11 +89,11 @@ public class WorldRender implements Disposable
         }
 
         //render blueprint
-        worldControl.blueprint.getBlueprintSprite().draw(game.batch);
+        worldControl.blueprint.getBlueprintSprite().draw(game.getBatch());
 
 
 
-        game.batch.end();
+        game.getBatch().end();
     }
 
     @Override

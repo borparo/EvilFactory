@@ -63,14 +63,14 @@ public class TitleScreen extends AbstractScreen
         //PLAY BUTTON
         if(Gdx.input.justTouched())
         {
-            game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(game.touchPosition);
+            game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.getCamera().unproject(game.getTouchPosition());
 
-            if(game.touchPosition.x > play.getX() &&
-                    game.touchPosition.x < play.getX() + play.getWidth() &&
-                    game.touchPosition.y > play.getY()  &&
+            if(game.getTouchPosition().x > play.getX() &&
+                    game.getTouchPosition().x < play.getX() + play.getWidth() &&
+                    game.getTouchPosition().y > play.getY()  &&
 
-                    game.touchPosition.y < (play.getY() + play.getHeight()))
+                    game.getTouchPosition().y < (play.getY() + play.getHeight()))
             {
                 //SET PLAY SCREEN
                 if (!PlayerStats.TUTORIAL_COMPLETE)
@@ -89,13 +89,13 @@ public class TitleScreen extends AbstractScreen
 
         if(Gdx.input.justTouched())
         {
-            game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(game.touchPosition);
+            game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.getCamera().unproject(game.getTouchPosition());
 
-            if(game.touchPosition.x > quit.getX() &&
-                    game.touchPosition.x < quit.getX() + quit.getWidth() &&
-                    game.touchPosition.y > quit.getY() &&
-                    game.touchPosition.y < (quit.getY() + quit.getHeight()))
+            if(game.getTouchPosition().x > quit.getX() &&
+                    game.getTouchPosition().x < quit.getX() + quit.getWidth() &&
+                    game.getTouchPosition().y > quit.getY() &&
+                    game.getTouchPosition().y < (quit.getY() + quit.getHeight()))
             {
                 Gdx.app.exit();
             }
@@ -105,13 +105,13 @@ public class TitleScreen extends AbstractScreen
 
         if(Gdx.input.justTouched())
         {
-            game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(game.touchPosition);
+            game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.getCamera().unproject(game.getTouchPosition());
 
-            if( game.touchPosition.x > settings.getX() &&
-                    game.touchPosition.x < settings.getX() + settings.getWidth() &&
-                    game.touchPosition.y > settings.getY() &&
-                    game.touchPosition.y < (settings.getY() + settings.getHeight()))
+            if( game.getTouchPosition().x > settings.getX() &&
+                    game.getTouchPosition().x < settings.getX() + settings.getWidth() &&
+                    game.getTouchPosition().y > settings.getY() &&
+                    game.getTouchPosition().y < (settings.getY() + settings.getHeight()))
             {
                 game.setScreen(game.settings);
             }
@@ -121,13 +121,13 @@ public class TitleScreen extends AbstractScreen
 
         if(Gdx.input.justTouched())
         {
-            game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(game.touchPosition);
+            game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.getCamera().unproject(game.getTouchPosition());
 
-            if( game.touchPosition.x > help.getX() &&
-                    game.touchPosition.x < help.getX() + help.getWidth() &&
-                    game.touchPosition.y > help.getY() &&
-                    game.touchPosition.y < (help.getY() + help.getHeight()))
+            if( game.getTouchPosition().x > help.getX() &&
+                    game.getTouchPosition().x < help.getX() + help.getWidth() &&
+                    game.getTouchPosition().y > help.getY() &&
+                    game.getTouchPosition().y < (help.getY() + help.getHeight()))
             {
                 game.setScreen(game.help);
             }
@@ -138,32 +138,32 @@ public class TitleScreen extends AbstractScreen
     public void render(float delta)
     {
         // update camera and method
-       game.camera.update();
+       game.getCamera().update();
         update(delta);
 
         // set viewport
-        Gdx.gl.glViewport( game.viewport.getScreenX(),  game.viewport.getScreenY(),
-                game.viewport.getScreenWidth(), game.viewport.getScreenHeight());
+        Gdx.gl.glViewport( game.getViewport().getScreenX(),  game.getViewport().getScreenY(),
+                game.getViewport().getScreenWidth(), game.getViewport().getScreenHeight());
 
         Gdx.gl.glClearColor(0.65f, 0.65f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //game.camera.update();
 
-        game.batch.setProjectionMatrix(game.camera.combined);
+        game.getBatch().setProjectionMatrix(game.getCamera().combined);
 
-        game.batch.begin();
+        game.getBatch().begin();
 
-        bg.draw(game.batch);
-        play.draw(game.batch);
-        quit.draw(game.batch);
-        help.draw(game.batch);
-        settings.draw(game.batch);
+        bg.draw(game.getBatch());
+        play.draw(game.getBatch());
+        quit.draw(game.getBatch());
+        help.draw(game.getBatch());
+        settings.draw(game.getBatch());
 
         minion.render(delta, game);
         sillyMinion.render(delta,game);
 
-        game.batch.end();
+        game.getBatch().end();
 
 
 

@@ -1,7 +1,6 @@
 package com.ggg.evilfactory.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -37,81 +36,81 @@ public class SettingsScreen extends AbstractScreen
         // SETTINGS BUTTONS
         if (Gdx.input.justTouched())
         {
-            game.touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(game.touchPosition);
+            game.getTouchPosition().set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.getCamera().unproject(game.getTouchPosition());
 
             //BACK BUTTON
-            if (game.touchPosition.x > back.getX() &&
-                    game.touchPosition.x < back.getX() + back.getWidth() &&
-                    game.touchPosition.y > back.getY() &&
-                    game.touchPosition.y < (back.getY() + back.getHeight()))
+            if (game.getTouchPosition().x > back.getX() &&
+                    game.getTouchPosition().x < back.getX() + back.getWidth() &&
+                    game.getTouchPosition().y > back.getY() &&
+                    game.getTouchPosition().y < (back.getY() + back.getHeight()))
             {
                 game.setScreen(game.title);
             }
 
             //MUSIC YES BUTTON
-            if (game.touchPosition.x > Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2 &&
-                    game.touchPosition.x < Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET + 100 &&
-                    game.touchPosition.y > 1000 &&
-                    game.touchPosition.y < 1200)
+            if (game.getTouchPosition().x > Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2 &&
+                    game.getTouchPosition().x < Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET + 100 &&
+                    game.getTouchPosition().y > 1000 &&
+                    game.getTouchPosition().y < 1200)
             {
                 PlayerStats.MUSIC_ON = true;
                 game.gameMusicTrack.play();
             }
 
             //MUSIC NO BUTTON
-            if (game.touchPosition.x > Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2 &&
-                    game.touchPosition.x < Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2 + 200 &&
-                    game.touchPosition.y > 1000 &&
-                    game.touchPosition.y < 1200)
+            if (game.getTouchPosition().x > Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2 &&
+                    game.getTouchPosition().x < Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2 + 200 &&
+                    game.getTouchPosition().y > 1000 &&
+                    game.getTouchPosition().y < 1200)
             {
                 game.gameMusicTrack.pause();
                 PlayerStats.MUSIC_ON = false;
             }
 
             //FX YES BUTTON
-            if (game.touchPosition.x > Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2 &&
-                    game.touchPosition.x < Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2 + 200 &&
-                    game.touchPosition.y > 700 &&
-                    game.touchPosition.y < 900)
+            if (game.getTouchPosition().x > Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2 &&
+                    game.getTouchPosition().x < Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2 + 200 &&
+                    game.getTouchPosition().y > 700 &&
+                    game.getTouchPosition().y < 900)
             {
                 PlayerStats.SOUND_FX = true;
             }
 
             //FX NO BUTTON
-            if (game.touchPosition.x > Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2 &&
-                    game.touchPosition.x < Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2 + 200 &&
-                    game.touchPosition.y > 700 &&
-                    game.touchPosition.y < 900)
+            if (game.getTouchPosition().x > Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2 &&
+                    game.getTouchPosition().x < Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2 + 200 &&
+                    game.getTouchPosition().y > 700 &&
+                    game.getTouchPosition().y < 900)
             {
                 PlayerStats.SOUND_FX = false;
             }
 
             //EASY BUTTON
-            if (game.touchPosition.x > easy.getX() &&
-                    game.touchPosition.x < easy.getX() + easy.getWidth() &&
-                    game.touchPosition.y > easy.getY() &&
-                    game.touchPosition.y < easy.getY() + easy.getHeight())
+            if (game.getTouchPosition().x > easy.getX() &&
+                    game.getTouchPosition().x < easy.getX() + easy.getWidth() &&
+                    game.getTouchPosition().y > easy.getY() &&
+                    game.getTouchPosition().y < easy.getY() + easy.getHeight())
             {
                 game.setEasyStats();
                 setDifficultyLevelColor();
             }
 
             //NORMAL
-            if (game.touchPosition.x > normal.getX() &&
-                    game.touchPosition.x < normal.getX() + normal.getWidth() &&
-                    game.touchPosition.y > normal.getY() &&
-                    game.touchPosition.y < normal.getY() + normal.getHeight())
+            if (game.getTouchPosition().x > normal.getX() &&
+                    game.getTouchPosition().x < normal.getX() + normal.getWidth() &&
+                    game.getTouchPosition().y > normal.getY() &&
+                    game.getTouchPosition().y < normal.getY() + normal.getHeight())
             {
                 game.setNormalStats();
                 setDifficultyLevelColor();
             }
 
             //HARD
-            if (game.touchPosition.x > hard.getX() &&
-                    game.touchPosition.x < hard.getX() + hard.getWidth() &&
-                    game.touchPosition.y > hard.getY() &&
-                    game.touchPosition.y < hard.getY() + hard.getHeight())
+            if (game.getTouchPosition().x > hard.getX() &&
+                    game.getTouchPosition().x < hard.getX() + hard.getWidth() &&
+                    game.getTouchPosition().y > hard.getY() &&
+                    game.getTouchPosition().y < hard.getY() + hard.getHeight())
             {
                 game.setHardStats();
                 setDifficultyLevelColor();
@@ -166,47 +165,42 @@ public class SettingsScreen extends AbstractScreen
     public void render(float delta)
     {
         // update camera
-        game.camera.update();
+        game.getCamera().update();
 
         update(delta);
 
 
         // set viewport
-        Gdx.gl.glViewport(game.viewport.getScreenX(), game.viewport.getScreenY(),
-                game.viewport.getScreenWidth(), game.viewport.getScreenHeight());
+        Gdx.gl.glViewport(game.getViewport().getScreenX(), game.getViewport().getScreenY(),
+                game.getViewport().getScreenWidth(), game.getViewport().getScreenHeight());
 
         Gdx.gl.glClearColor(0.65f, 0.65f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //game.camera.update();
 
-        game.batch.setProjectionMatrix(game.camera.combined);
+        game.getBatch().setProjectionMatrix(game.getCamera().combined);
 
-        game.batch.begin();
-
-
-        bg.draw(game.batch);
-        back.draw(game.batch);
-
-        game.textFont.draw(game.batch, "Music:", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1200);
-        game.textFont.draw(game.batch, "YES", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2, 1200);
-        game.textFont.draw(game.batch, "NO", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2, 1200);
-
-        game.textFont.draw(game.batch, "SoundFX:", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 900);
-        game.textFont.draw(game.batch, "YES", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2, 900);
-        game.textFont.draw(game.batch, "NO", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2, 900);
-
-        easy.draw(game.batch);
-        normal.draw(game.batch);
-        hard.draw(game.batch);
-
-        game.batch.end();
+        game.getBatch().begin();
 
 
+        bg.draw(game.getBatch());
+        back.draw(game.getBatch());
 
+        game.textFont.draw(game.getBatch(), "Music:", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 1200);
+        game.textFont.draw(game.getBatch(), "YES", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2, 1200);
+        game.textFont.draw(game.getBatch(), "NO", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2, 1200);
+
+        game.textFont.draw(game.getBatch(), "SoundFX:", Constants.VIEWPORT_WIDTH / 2 - Constants.BUTTONS_OFFSET * 2, 900);
+        game.textFont.draw(game.getBatch(), "YES", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET / 2, 900);
+        game.textFont.draw(game.getBatch(), "NO", Constants.VIEWPORT_WIDTH / 2 + Constants.BUTTONS_OFFSET * 2, 900);
+
+        easy.draw(game.getBatch());
+        normal.draw(game.getBatch());
+        hard.draw(game.getBatch());
+
+        game.getBatch().end();
     }
-
-
 
     @Override
     public void show()

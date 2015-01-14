@@ -19,16 +19,16 @@ import com.ggg.evilfactory.utils.GameStats;
 
 public class Application extends Game
 {
-	public SpriteBatch batch;
-	public OrthographicCamera camera;
+	private SpriteBatch batch;
+	private  OrthographicCamera camera;
 
-    public BitmapFont gameFont;
-    public BitmapFont scoreFont;
-    public BitmapFont textFont;
-    public BitmapFont titleFont;
+    private BitmapFont gameFont;
+    private BitmapFont scoreFont;
+    private BitmapFont textFont;
+    private BitmapFont titleFont;
 
-    public Vector3 touchPosition;
-    public Music gameMusicTrack;
+    private Vector3 touchPosition;
+    private Music gameMusicTrack;
 
     public TitleScreen title;
     public HelpScreen help;
@@ -43,7 +43,7 @@ public class Application extends Game
 
 
     private boolean paused;
-    public Viewport viewport;
+    private Viewport viewport;
 
     Sprite gear;
 
