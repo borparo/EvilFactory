@@ -240,7 +240,7 @@ public class WorldControl
                             pickUpNo.play(1.0f);
                         }
                     }
-                    //if we click on a bomb before explosion add points. TODO BONUSES
+                    //if we click on a bomb before explosion add points. TODO BONUSES id:0 gh:3 ic:gh
                     else if (piece instanceof Bomb)
                     {
                         ParticlesManager.bombSave.setPosition(piece.getPositionX(), 75);
@@ -280,10 +280,10 @@ public class WorldControl
                         setPlayerScore(getPlayerScore() + 300);
                     }
 
-                    if (PlayerStats.LEVEL_COMPLETE) //TODO check achievements completed-
+                    if (PlayerStats.LEVEL_COMPLETE) //TODO check achievements completed- id:1 gh:4 ic:gh
                     {
                         game.setPaused(true);
-                        //TODO save money to file. Display level complete message.
+                        //TODO save money to file. Display level complete message. id:2 gh:5 ic:gh
                         PlayerStats.PLAYER_SAVED_MONEY += getPlayerCoins();
                         PlayerStats.CURRENT_SCORE += getPlayerScore();
                         game.setScreen(game.store);
